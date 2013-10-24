@@ -43,6 +43,7 @@ Available options:
 --series=<true|false>  run tests sequentially, default is false (i.e. run all tests in parallel)
 --setUp=<file>         global setUp file (i.e. file containing an exported 'setUp' function)
 --tearDown=<file>      global tearDown file (i.e. file contining an exported 'tearDown' function)
+--level=<level>        logging level: fatal, error, warn, info, debug, trace. Default is fatal. Log output goes to stderr.
 --help                 help
 ```
 
@@ -68,6 +69,12 @@ Multiple code coverages:
     $ env NODE_PATH=./lib istanbul cover --dir cov-unit ./turbo.js -- ./test/unit
     $ env NODE_PATH=./lib istanbul cover --dir cov-accept ./turbo.js -- --series=true ./test/accept
     $ istanbul report   # generates an amalgamated code coverage report
+
+Logging: turbo uses [Bunyan](https://github.com/trentm/node-bunyan) for internal json logging. This can be handy for both debugging turbo itself, and also gives more insight into what turbo is doing when running your tests. By default, log outtput goes to stderr.
+
+    $ env NODE_PATH=./lib turbo --level=trace ./test 2>/tmp/turbo.log
+    $ # then filter the log through a json tool of your choice, eg.
+    $ cat /tmp/turbo.log | jq . 
 
 TODO
 ====
