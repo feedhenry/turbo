@@ -79,7 +79,6 @@ Logging: turbo uses [Bunyan](https://github.com/trentm/node-bunyan) for internal
 TODO
 ====
 
-- Turbo needs its own repo (currently lives in DynoFarm)
 - pretty output reports, e.g. Tap or similar (currently console.log's an array of results)
 - Turbo needs tests of its own (ironically!)
 - real examples directory, basic & express usage
