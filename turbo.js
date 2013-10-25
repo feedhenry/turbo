@@ -41,7 +41,7 @@ log = bunyan.createLogger({
   name: 'turbo',
   stream: process.stderr,
   src: true,
-  level: rc.level || 'trace'
+  level: rc.level || 'fatal'
 });
 
 log.trace({options: rc}, 'options');
