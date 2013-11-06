@@ -87,7 +87,7 @@ function runAllTests() {
       // if we've gotten to here there are no errors.. (as we fail fast..)
       var tests = _.flatten(results);
       log.info({falttenedTestResults: tests});
-      console.log(util.inspect(tests, true, null)); // TODO - tap output here or something..
+      console.log(JSON.stringify({'Test results': tests}, true, null)); // TODO - tap output here or something..
     };
   });
 };
