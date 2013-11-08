@@ -19,6 +19,7 @@ function usage() {
   console.log("--setUp=<file>         global setUp file (i.e. file containg an exported 'setUp' function)");
   console.log("--tearDown=<file>      global tearDown file (i.e. file containg an exported 'tearDown' function)");
   console.log("--level=<level>        logging level: fatal, error, warn, info, debug, trace. Default is fatal. Log output goes to stderr.");
+  console.log("--test=<test>          run single test function in a file (only works when one test file used)");
   console.log("--help                 help");
   process.exit();
 };
@@ -144,6 +145,11 @@ function start(callback){
       }else runTests();
 
       function runTests() {
+        if (rc.test) {
+          if (!_.contains(tests, rc.test)) return cb("Test doesn't exist: " + rc.test);
+          log.info({test: rc.test, file: file}, 'Running single test');
+          tests = [rc.test];
+        }
         async[asyncMapFunc](tests, runTest, function(err, results) {
           if (err) return cb(err);
 

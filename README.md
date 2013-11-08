@@ -44,6 +44,7 @@ Available options:
 --setUp=<file>         global setUp file (i.e. file containing an exported 'setUp' function)
 --tearDown=<file>      global tearDown file (i.e. file contining an exported 'tearDown' function)
 --level=<level>        logging level: fatal, error, warn, info, debug, trace. Default is fatal. Log output goes to stderr.
+--test=<test>          run single test function in a file (only works when one test file used)
 --help                 help
 ```
 
