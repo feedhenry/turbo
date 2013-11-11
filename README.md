@@ -38,9 +38,9 @@ Install
 
 To install globally: 
 
-    $ npm install -g turbo
+    $ npm install -g turbo-test-runner
 
-Or add as to your "devDependencies" in package.json, and use locally: 
+Or add to your "devDependencies" in package.json, and use locally: 
    
     $ ./node_modules/.bin/turbo
 
