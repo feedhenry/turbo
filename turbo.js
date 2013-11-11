@@ -27,7 +27,7 @@ function usage() {
 var log;
 
 function fatal(err) {
-  if (log) log.fatal(err);
+  if (log) log.error(err);
   console.error(err);
   process.exit(1);
 };
@@ -51,25 +51,33 @@ log.trace({options: rc}, 'options');
 var asyncMapFunc = 'map';
 if (rc.series) asyncMapFunc = 'mapSeries';
 
-if (rc.setUp) {
-  if (!fs.existsSync(rc.setUp)) fatal("setUp file doesn't exist: " + rc.setUp);
-  log.info('running setUp in file:', rc.setUp);
-  var t = require(path.resolve(rc.setUp));
-  if (!t['setUp']) fatal("setUp file doesn't contain a 'setUp' function!" + rc.tearDown);
-  t.setUp(function(err){
-    if (err) fatal(err);
-    runAllTests();
-  });
-} else runAllTests();
+function go(cb) {
+  if (rc.setUp) {
+    if (!fs.existsSync(rc.setUp)) fatal("setUp file doesn't exist: " + rc.setUp);
+    log.info('running setUp in file:', rc.setUp);
+    var t = require(path.resolve(rc.setUp));
+    if (!t['setUp']) fatal("setUp file doesn't contain a 'setUp' function!" + rc.tearDown);
+    t.setUp(function(err){
+      if (err) fatal(err);
+      runAllTests(cb);
+    });
+  } else runAllTests(cb);
+};
+
+if(require.main === module) {
+  go();
+}
+exports.go = go;
 
 // main entry point, run all our tests..
-function runAllTests() {
+function runAllTests(cb) {
   start(function(err, results) {
     if (err) {
       // test failure
-      log.fatal(err);
+      log.error(err);
       console.error(err);
       console.trace();
+      if (cb) return cb(err);
       process.exit();
     }
     log.trace({results: results}, 'runAllTests results');
@@ -88,7 +96,9 @@ function runAllTests() {
       // if we've gotten to here there are no errors.. (as we fail fast..)
       var tests = _.flatten(results);
       log.info({falttenedTestResults: tests});
-      console.log(JSON.stringify({'Test results': tests}, true, null)); // TODO - tap output here or something..
+      var res = {'Test results': tests};
+      if (cb) return cb(null, res);
+      console.log(JSON.stringify(res)); // TODO - tap output here or something..
     };
   });
 };

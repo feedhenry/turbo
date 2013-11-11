@@ -1,13 +1,13 @@
 {
   "name": "turbo-test-runner",
-  "version": "0.0.0",
+  "version": "0.2.0",
   "description": "Turbo the node.js Test Runner",
   "main": "turbo.js",
   "bin" : {
     "turbo": "./turbo.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "make test"
   },
   "repository": "",
   "keywords": [
@@ -24,6 +24,9 @@
     "underscore": "~1.5.2",
     "bunyan": "0.22.0"
   },
-  "global": true,
-  "private" : true
+  "devDependencies":{
+    "proxyquire":"0.4.1",
+    "istanbul": "0.1.42"
+  },  
+  "global": true
 }

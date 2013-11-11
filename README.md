@@ -33,6 +33,17 @@ Turbo is a no fluff, no huff node.js Test Runner. Its guiding principles are as 
 * uses the excellent 'rc' module for config loading. This allows incredibly flexible config file options, see: https://npmjs.org/package/rc
 
 
+Install
+-------
+
+To install globally: 
+
+    $ npm install -g turbo
+
+Or add as to your "devDependencies" in package.json, and use locally: 
+   
+    $ ./node_modules/.bin/turbo
+
 Usage
 -----
 
@@ -77,17 +88,15 @@ Logging: turbo uses [Bunyan](https://github.com/trentm/node-bunyan) for internal
     $ # then filter the log through a json tool of your choice, eg.
     $ cat /tmp/turbo.log | jq . 
 
-TODO
-====
+Debugging
+---------
 
-- pretty output reports, e.g. Tap or similar (currently console.log's an array of results)
-- Turbo needs tests of its own (ironically!)
-- real examples directory, basic & express usage
-- support for node inspector debugging, e.g. turbo --debug <test>
-- investigate the use of domains for uncaught exception Asserts
-- optionally swallow stdout for quite output
-- jenkins integration
-- document use from within 'npm test'
+You can debug tests with Turbo and your Node.js debugging tool of choice as follows:
+
+- first put 'debug' in the test you wish to debug
+- then run Turbo as follows: 
+
+    $ node --debug ./node_modules/.bin/turbo <turbo-args>
 
 
 

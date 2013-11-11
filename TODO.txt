@@ -1,0 +1,8 @@
+TODO
+====
+
+- pretty output reports, e.g. Tap or similar (currently console.log's an array of results)
+- examples directory, basic & express usage
+- investigate the use of domains for uncaught exception Asserts
+- optionally swallow stdout for quite output
+- jenkins integration
