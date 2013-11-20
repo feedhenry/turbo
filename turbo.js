@@ -96,7 +96,7 @@ function runAllTests(cb) {
       // if we've gotten to here there are no errors.. (as we fail fast..)
       var tests = _.flatten(results);
       log.info({falttenedTestResults: tests});
-      var res = {'Test results': tests};
+      var res = {'Results': tests};
       if (cb) return cb(null, res);
       console.log(JSON.stringify(res)); // TODO - tap output here or something..
     };
