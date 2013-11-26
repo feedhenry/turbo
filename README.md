@@ -51,12 +51,13 @@ Usage
 $ turbo
 turbo.js <test-dir-or-file>*
 Available options: 
---series=<true|false>  run tests sequentially, default is false (i.e. run all tests in parallel)
---setUp=<file>         global setUp file (i.e. file containing an exported 'setUp' function)
---tearDown=<file>      global tearDown file (i.e. file contining an exported 'tearDown' function)
---level=<level>        logging level: fatal, error, warn, info, debug, trace. Default is fatal. Log output goes to stderr.
---test=<test>          run single test function in a file (only works when one test file used)
 --help                 help
+--level=<level>        logging level: fatal, error, warn, info, debug, trace. Default is fatal. Log output goes to stderr.
+--series=<true|false>  run tests sequentially, default is false (i.e. run all tests in parallel)
+--setUp=<file>         global setUp file (i.e. file containg an exported 'setUp' function)
+--tearDown=<file>      global tearDown file (i.e. file containg an exported 'tearDown' function)
+--test=<test>          run single test function in a file (only works when one test file used)
+--timeout=<seconds>    timeout value for each test function (60 seconds by default)
 ```
 
 Examples
@@ -71,6 +72,8 @@ Typical usage:
     $ env NODE_PATH=./lib turbo ./test/unit-1 ./test/unit-2 
 
     $ env NODE_PATH=./lib turbo --setUp ./test/globalSetup.js --series=true ./test/accept 
+
+    $ env NODE_PATH=./lib turbo --timeout=10 ./test/test-three.js
 
 Use with code coverage:
 

@@ -15,12 +15,14 @@ process.on('uncaughtException', function(err) {
 function usage() {
   console.log("turbo.js <test-dir-or-file>*");
   console.log("Available options: ");
+  console.log("--help                 help");
+  console.log("--level=<level>        logging level: fatal, error, warn, info, debug, trace. Default is fatal. Log output goes to stderr.");
   console.log("--series=<true|false>  run tests sequentially, default is false (i.e. run all tests in parallel)");
   console.log("--setUp=<file>         global setUp file (i.e. file containg an exported 'setUp' function)");
   console.log("--tearDown=<file>      global tearDown file (i.e. file containg an exported 'tearDown' function)");
-  console.log("--level=<level>        logging level: fatal, error, warn, info, debug, trace. Default is fatal. Log output goes to stderr.");
   console.log("--test=<test>          run single test function in a file (only works when one test file used)");
-  console.log("--help                 help");
+  console.log("--timeout=<seconds>    timeout value for each test function (60 seconds by default)");
+
   process.exit();
 };
 
@@ -32,7 +34,7 @@ function fatal(err) {
   process.exit(1);
 };
 
-var rc = require('rc')('turbo', {series: false});
+var rc = require('rc')('turbo', {series: false, timeout:60});
 if (rc.help) usage();
 var args = rc._;
 if (args.length === 0) usage();
@@ -136,9 +138,16 @@ function start(callback){
       var t = require(path.resolve(file));
       var tests = _.keys(t);
 
-      function runTest(func, cb) {
+      function runTest(func, rtcb) {
+        console.log("func: " + util.inspect(func), asyncMapFunc, t)
         log.info({func: func, file: file}, 'Running test: ' + func);
-        t[func](cb);
+        var timer = setTimeout(function(){
+          fatal('Error! Test has timed out! File: ' + file + ' Test: ' + func);
+        }, rc.timeout * 1000);
+        t[func](function(err){
+          clearTimeout(timer);
+          return rtcb(err);
+        });
       }
 
       var runTearDown = false;
@@ -162,7 +171,6 @@ function start(callback){
         }
         async[asyncMapFunc](tests, runTest, function(err, results) {
           if (err) return cb(err);
-
           var testResults = [];
           results.forEach(function(result, index) {
             var t = tests[index];
