@@ -139,7 +139,6 @@ function start(callback){
       var tests = _.keys(t);
 
       function runTest(func, rtcb) {
-        console.log("func: " + util.inspect(func), asyncMapFunc, t)
         log.info({func: func, file: file}, 'Running test: ' + func);
         var timer = setTimeout(function(){
           fatal('Error! Test has timed out! File: ' + file + ' Test: ' + func);
