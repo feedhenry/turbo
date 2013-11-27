@@ -153,9 +153,9 @@ function start(callback){
       if (_.contains(tests, 'setUp')) {
         runTest('setUp', function(err) {
           if (err) return cb(err);
+          tests = _.without(tests, 'setUp');
           if (_.contains(tests, 'tearDown')) {
             runTearDown = true;
-            tests = _.without(tests, 'setUp');
             tests = _.without(tests, 'tearDown');
           }
           runTests()
