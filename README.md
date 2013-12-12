@@ -55,6 +55,7 @@ Available options:
 --level=<level>        logging level: fatal, error, warn, info, debug, trace. Default is fatal. Log output goes to stderr.
 --series=<true|false>  run tests sequentially, default is false (i.e. run all tests in parallel)
 --setUp=<file>         global setUp file (i.e. file containg an exported 'setUp' function)
+--tap=true             output results in TAP format
 --tearDown=<file>      global tearDown file (i.e. file containg an exported 'tearDown' function)
 --test=<test>          run single test function in a file (only works when one test file used)
 --timeout=<seconds>    timeout value for each test function (60 seconds by default)

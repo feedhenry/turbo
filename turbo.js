@@ -7,11 +7,6 @@ var fs = require('fs');
 var path = require('path');
 var bunyan = require('bunyan');
 
-process.on('uncaughtException', function(err) {
-  console.error("Uncaught exception: ", util.inspect(err.stack || err));
-  process.exit(1);
-});
-
 function usage() {
   console.log("turbo.js <test-dir-or-file>*");
   console.log("Available options: ");
@@ -19,6 +14,7 @@ function usage() {
   console.log("--level=<level>        logging level: fatal, error, warn, info, debug, trace. Default is fatal. Log output goes to stderr.");
   console.log("--series=<true|false>  run tests sequentially, default is false (i.e. run all tests in parallel)");
   console.log("--setUp=<file>         global setUp file (i.e. file containg an exported 'setUp' function)");
+  console.log("--tap=true             output results in TAP format");
   console.log("--tearDown=<file>      global tearDown file (i.e. file containg an exported 'tearDown' function)");
   console.log("--test=<test>          run single test function in a file (only works when one test file used)");
   console.log("--timeout=<seconds>    timeout value for each test function (60 seconds by default)");
@@ -38,6 +34,12 @@ var rc = require('rc')('turbo', {series: false, timeout:60});
 if (rc.help) usage();
 var args = rc._;
 if (args.length === 0) usage();
+
+process.on('uncaughtException', function(err) {
+  if (rc.tap) console.log('Bail out!');
+  console.error("Uncaught exception: ", util.inspect(err.stack || err));
+  process.exit(1);
+});
 
 // set up logging
 log = bunyan.createLogger({
@@ -76,6 +78,7 @@ function runAllTests(cb) {
   start(function(err, results) {
     if (err) {
       // test failure
+      if (rc.tap) console.log('Bail out!');
       log.error(err);
       console.error(err);
       console.trace();
@@ -98,9 +101,17 @@ function runAllTests(cb) {
       // if we've gotten to here there are no errors.. (as we fail fast..)
       var tests = _.flatten(results);
       log.info({falttenedTestResults: tests});
-      var res = {'Results': tests};
+      var res = {'results': tests};
       if (cb) return cb(null, res);
-      console.log(JSON.stringify(res)); // TODO - tap output here or something..
+      if (rc.tap) {
+        console.log("TAP", util.inspect(res));
+        console.log("1.." + tests.length);
+        tests.forEach(function(test, index) {
+          console.log('ok ' + (index +1)+ ' ' + test.file + ' - ' + test.test);
+        });
+      }else {
+        console.log(JSON.stringify(res));
+      }
     };
   });
 };
