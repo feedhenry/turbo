@@ -104,7 +104,6 @@ function runAllTests(cb) {
       var res = {'results': tests};
       if (cb) return cb(null, res);
       if (rc.tap) {
-        console.log("TAP", util.inspect(res));
         console.log("1.." + tests.length);
         tests.forEach(function(test, index) {
           console.log('ok ' + (index +1)+ ' ' + test.file + ' - ' + test.test);
