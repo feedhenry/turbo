@@ -136,7 +136,7 @@ function start(callback){
     function testFile(file, cb) {
       log.info({test: file}, 'running test file: ' + file);
       var t = require(path.resolve(file));
-      var tests = _.keys(t);
+      var tests = _.functions(t);
 
       function runTest(func, rtcb) {
         log.info({func: func, file: file}, 'Running test: ' + func);
