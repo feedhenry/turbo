@@ -96,10 +96,37 @@ function testUsage(cb) {
   });
 };
 
+// test help
+function testHelp(cb) {
+  var realExit = process.exit;
+  var gotExit = false;
+  process.exit = function() {
+    gotExit = true;
+  }
+
+  var realLog = console.log;
+  console.log = function(log) {};
+
+  var mock_rc = function(name, opts) {
+    return {
+      _ : [],
+      help: true
+    };
+  };
+
+  var turbo = proxyquire('../turbo.js', {'rc': mock_rc});
+  turbo.go(function(err, results){
+    process.exit = realExit;
+    console.log =realLog;
+    if (err) return cb(err);
+    assert.ok(gotExit, 'Expected process.exit to be called');
+    return cb();
+  });
+};
+
 function testReturnError(cb) {
   var realErr = console.error;
   console.error = function(msg) {
-    //console.log("ERR", msg);
   };
 
   var realTrace = console.trace;
@@ -131,9 +158,12 @@ testHappy(function(err) {
         assert.ok(!err);
         testUsage(function(err) {
           assert.ok(!err);
-          testReturnError(function(err) {
+          testHelp(function(err) {
             assert.ok(!err);
-            console.log("All done..");
+            testReturnError(function(err) {
+              assert.ok(!err);
+              console.log("All done..");
+            });
           });
         });
       });
