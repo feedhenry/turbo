@@ -1,5 +1,6 @@
 Turbo Test Runner
 =================
+[![Build Status](https://travis-ci.org/feedhenry/turbo.png?branch=master)](https://travis-ci.org/feedhenry/turbo)
 
 Turbo is a no fluff, no huff node.js Test Runner. Its guiding principles are as follows:
 
