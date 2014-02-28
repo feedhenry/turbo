@@ -85,7 +85,7 @@ Multiple code coverages:
     $ env NODE_PATH=./lib istanbul cover --dir cov-accept ./turbo.js -- --series=true ./test/accept
     $ istanbul report   # generates an amalgamated code coverage report
 
-Logging: turbo uses [Bunyan](https://github.com/trentm/node-bunyan) for internal json logging. This can be handy for both debugging turbo itself, and also gives more insight into what turbo is doing when running your tests. By default, log outtput goes to stderr.
+Logging: turbo uses [Bunyan](https://github.com/trentm/node-bunyan) for internal json logging. This can be handy for both debugging turbo itself, and also gives more insight into what turbo is doing when running your tests. By default, log output goes to stderr.
 
     $ env NODE_PATH=./lib turbo --level=trace ./test 2>/tmp/turbo.log
     $ # then filter the log through a json tool of your choice, eg.
