@@ -1,6 +1,6 @@
 {
   "name": "turbo-test-runner",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Turbo the node.js Test Runner",
   "main": "turbo.js",
   "bin" : {

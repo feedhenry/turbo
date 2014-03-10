@@ -23,7 +23,7 @@ function usage() {
   console.log("--test=<test>          run single test function in a file (only works when one test file used)");
   console.log("--timeout=<seconds>    timeout value for each test function (60 seconds by default)");
 
-  process.exit();
+  process.exit(1);
 };
 
 var log;
@@ -80,7 +80,7 @@ function runAllTests(cb) {
       console.error(err);
       console.trace();
       if (cb) return cb(err);
-      process.exit();
+      process.exit(1);
     }
     log.trace({results: results}, 'runAllTests results');
     if (rc.tearDown) {

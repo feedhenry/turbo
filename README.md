@@ -98,10 +98,10 @@ Debugging
 
 You can debug tests with Turbo and your Node.js debugging tool of choice as follows:
 
-- first put 'debug' in the test you wish to debug
+- first put 'debugger' statements in the test you wish to debug
 - then run Turbo as follows: 
 
-    $ node --debug ./node_modules/.bin/turbo <turbo-args>
+    $ node --debug-brk ./node_modules/.bin/turbo <turbo-args>
 
 
 
