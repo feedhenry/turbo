@@ -1,5 +1,7 @@
 Turbo Test Runner
 =================
+[![Build Status](https://travis-ci.org/feedhenry/turbo.png?branch=master)](https://travis-ci.org/feedhenry/turbo)
+[![NPM version](https://badge.fury.io/js/turbo.png)](http://badge.fury.io/js/turbo)
 
 Turbo is a no fluff, no huff node.js Test Runner. Its guiding principles are as follows:
 
@@ -85,7 +87,7 @@ Multiple code coverages:
     $ env NODE_PATH=./lib istanbul cover --dir cov-accept ./turbo.js -- --series=true ./test/accept
     $ istanbul report   # generates an amalgamated code coverage report
 
-Logging: turbo uses [Bunyan](https://github.com/trentm/node-bunyan) for internal json logging. This can be handy for both debugging turbo itself, and also gives more insight into what turbo is doing when running your tests. By default, log outtput goes to stderr.
+Logging: turbo uses [Bunyan](https://github.com/trentm/node-bunyan) for internal json logging. This can be handy for both debugging turbo itself, and also gives more insight into what turbo is doing when running your tests. By default, log output goes to stderr.
 
     $ env NODE_PATH=./lib turbo --level=trace ./test 2>/tmp/turbo.log
     $ # then filter the log through a json tool of your choice, eg.
@@ -96,10 +98,10 @@ Debugging
 
 You can debug tests with Turbo and your Node.js debugging tool of choice as follows:
 
-- first put 'debug' in the test you wish to debug
+- first put 'debugger' statements in the test you wish to debug
 - then run Turbo as follows: 
 
-    $ node --debug ./node_modules/.bin/turbo <turbo-args>
+    $ node --debug-brk ./node_modules/.bin/turbo <turbo-args>
 
 
 
