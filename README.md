@@ -104,4 +104,20 @@ You can debug tests with Turbo and your Node.js debugging tool of choice as foll
     $ node --debug-brk ./node_modules/.bin/turbo <turbo-args>
 
 
+Assert Sugar
+------------
+
+Unlike other test runners, Turbo doesn't add any additional assert functions itself (that's not its job!). You use just plain old node.js [assert](http://nodejs.org/api/assert.html), or if sugar is your thing, try using [Chai](http://chaijs.com/)) in your tests, e.g.
+
+```
+$ npm install chai --save-dev
+```
+
+Then in your tests:
+
+```
+var assert = require('chai').assert;
+...
+assert.lengthOf(foo, 3, "Foo's value has a length of 3")
+```
 
