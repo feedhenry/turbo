@@ -107,7 +107,7 @@ You can debug tests with Turbo and your Node.js debugging tool of choice as foll
 Assert Sugar
 ------------
 
-Unlike other test runners, Turbo doesn't add any additional assert functions itself (that's not its job!). You use just plain old node.js [assert](http://nodejs.org/api/assert.html), or if sugar is your thing, try using [Chai](http://chaijs.com/)) in your tests, e.g.
+Unlike other test runners, Turbo doesn't add any additional assert functions itself (that's not its job!). You use just plain old node.js [assert](http://nodejs.org/api/assert.html), or if sugar is your thing, try using [Chai](http://chaijs.com/) in your tests, e.g.
 
 ```
 $ npm install chai --save-dev
