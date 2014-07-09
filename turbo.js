@@ -15,13 +15,14 @@ process.on('uncaughtException', function(err) {
 function usage() {
   console.log("turbo.js <test-dir-or-file>*");
   console.log("Available options: ");
-  console.log("--help                 help");
-  console.log("--level=<level>        logging level: fatal, error, warn, info, debug, trace. Default is fatal. Log output goes to stderr.");
-  console.log("--series=<true|false>  run tests sequentially, default is false (i.e. run all tests in parallel)");
-  console.log("--setUp=<file>         global setUp file (i.e. file containg an exported 'setUp' function)");
-  console.log("--tearDown=<file>      global tearDown file (i.e. file containg an exported 'tearDown' function)");
-  console.log("--test=<test>          run single test function in a file (only works when one test file used)");
-  console.log("--timeout=<seconds>    timeout value for each test function (60 seconds by default)");
+  console.log("--help                   help");
+  console.log("--level=<level>          logging level: fatal, error, warn, info, debug, trace. Default is fatal. Log output goes to stderr.");
+  console.log("--series=<true|false>    run tests sequentially, default is false (i.e. run all tests in parallel)");
+  console.log("--setUp=<file>           global setUp file (i.e. file containg an exported 'setUp' function)");
+  console.log("--tearDown=<file>        global tearDown file (i.e. file containg an exported 'tearDown' function)");
+  console.log("--test=<test>            run single test function in a file (only works when one test file used)");
+  console.log("--timeout=<seconds>      timeout value for each test function (60 seconds by default)");
+  console.log("--exclude=<file1,file2>  exclude specific test files");
 
   process.exit(1);
 };
@@ -52,6 +53,11 @@ log.trace({options: rc}, 'options');
 // do we run sequentially or parallel
 var asyncMapFunc = 'map';
 if (rc.series) asyncMapFunc = 'mapSeries';
+
+var excludeTests = [];
+if (rc.exclude) {
+  excludeTests = rc.exclude.split(',');
+}
 
 function go(cb) {
   if (rc.setUp) {
@@ -123,7 +129,7 @@ function start(callback){
         files.forEach(function(file) {
           // TODO - refactor 'testcommon.js'
           if (file.indexOf('test') === 0 && file.indexOf('~') === -1) {
-            tests.push(arg + '/' + file);
+            if (excludeTests.indexOf(file) === -1) tests.push(arg + '/' + file);
           }
         });
         async[asyncMapFunc](tests, testFile, cb);
