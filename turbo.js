@@ -7,22 +7,18 @@ var fs = require('fs');
 var path = require('path');
 var bunyan = require('bunyan');
 
-process.on('uncaughtException', function(err) {
-  console.error("Uncaught exception: ", util.inspect(err.stack || err));
-  process.exit(1);
-});
-
 function usage() {
   console.log("turbo.js <test-dir-or-file>*");
   console.log("Available options: ");
-  console.log("--help                   help");
-  console.log("--level=<level>          logging level: fatal, error, warn, info, debug, trace. Default is fatal. Log output goes to stderr.");
-  console.log("--series=<true|false>    run tests sequentially, default is false (i.e. run all tests in parallel)");
-  console.log("--setUp=<file>           global setUp file (i.e. file containg an exported 'setUp' function)");
-  console.log("--tearDown=<file>        global tearDown file (i.e. file containg an exported 'tearDown' function)");
-  console.log("--test=<test>            run single test function in a file (only works when one test file used)");
-  console.log("--timeout=<seconds>      timeout value for each test function (60 seconds by default)");
-  console.log("--exclude=<file1,file2>  exclude specific test files");
+  console.log("--help                          help");
+  console.log("--level=<level>                 logging level: fatal, error, warn, info, debug, trace. Default is fatal. Log output goes to stderr.");
+  console.log("--series=<true|false>           run tests sequentially, default is false (i.e. run all tests in parallel)");
+  console.log("--setUp=<file>                  global setUp file (i.e. file containg an exported 'setUp' function)");
+  console.log("--tearDown=<file>               global tearDown file (i.e. file containg an exported 'tearDown' function)");
+  console.log("--tearDownOnError=<true|false>  run the global tearDown after an error is thrown");
+  console.log("--test=<test>                   run single test function in a file (only works when one test file used)");
+  console.log("--timeout=<seconds>             timeout value for each test function (60 seconds by default)");
+  console.log("--exclude=<file1,file2>         exclude specific test files");
 
   process.exit(1);
 };
@@ -49,6 +45,17 @@ log = bunyan.createLogger({
 });
 
 log.trace({options: rc}, 'options');
+
+process.on('uncaughtException', function(err) {
+  console.error("Uncaught exception: ", util.inspect(err.stack || err));
+
+  if (rc.tearDownOnError === true || rc.tearDownOnError === 'true') {
+    runTearDown(function(err) {
+      if (err) console.error(err);
+      process.exit(1);
+    });
+  } else process.exit(1);
+});
 
 // do we run sequentially or parallel
 var asyncMapFunc = 'map';
@@ -90,15 +97,11 @@ function runAllTests(cb) {
     }
     log.trace({results: results}, 'runAllTests results');
     if (rc.tearDown) {
-      log.info('running tearDown in file: ' + rc.tearDown);
-      if (!fs.existsSync(rc.tearDown)) fatal("tearDown file doesn't exist: " + rc.tearDown);
-      var t = require(path.resolve(rc.tearDown));
-      if (!t['tearDown']) fatal("tearDown file doesn't contain a 'tearDown' function!" + rc.tearDown);
-      t.tearDown(function(err){
-        if (err) fatal(err);
+      runTearDown(function(err) {
+        if (err) return cb(err);
         end();
       });
-    }else end();
+    } else end();
 
     function end() {
       // if we've gotten to here there are no errors.. (as we fail fast..)
@@ -111,6 +114,13 @@ function runAllTests(cb) {
   });
 };
 
+function runTearDown(cb) {
+  log.info('running tearDown in file: ' + rc.tearDown);
+  if (!fs.existsSync(rc.tearDown)) fatal("tearDown file doesn't exist: " + rc.tearDown);
+  var t = require(path.resolve(rc.tearDown));
+  if (!t['tearDown']) fatal("tearDown file doesn't contain a 'tearDown' function!" + rc.tearDown);
+  t.tearDown(cb);
+}
 // kick things off by processing all our dirs/files passed on the cli
 function start(callback){
   async[asyncMapFunc](args, processArg, callback);
