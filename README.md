@@ -38,6 +38,8 @@ Turbo is a no fluff, no huff node.js Test Runner. Its guiding principles are as 
 
 * can exclude specific files with the '--exclude' flag
 
+* can self detect memory leaks with the '--leaks' flag
+
 
 Install
 -------
@@ -66,6 +68,8 @@ Available options:
 --test=<test>                   run single test function in a file (only works when one test file used)
 --timeout=<seconds>             timeout value for each test function (60 seconds by default)
 --exclude=<file1,file2>         exclude specific test files
+--leaks=<true|false>            attempt to self detect memory leaks
+
 ```
 
 Examples
@@ -129,3 +133,11 @@ var assert = require('chai').assert;
 assert.lengthOf(foo, 3, "Foo's value has a length of 3")
 ```
 
+Memory Leaks
+------------
+
+Turbo can attempt to detect memory leaks, when enabled with the `--leaks` flag, this works as follows:
+
+* Turbo uses [Memwatch](https://www.npmjs.com/package/memwatch) to detect leak events
+* When a leak event happens, Turbo uses [heapdump](https://github.com/bnoordhuis/node-heapdump) to take a shapshot of the V8 heap and dump it to disk.
+* These snapshots can then be inspected using Chrome's DevTools Profiler - a great tool for tracking down memory leaks.

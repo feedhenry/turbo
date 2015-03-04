@@ -19,6 +19,7 @@ function usage() {
   console.log("--test=<test>                   run single test function in a file (only works when one test file used)");
   console.log("--timeout=<seconds>             timeout value for each test function (60 seconds by default)");
   console.log("--exclude=<file1,file2>         exclude specific test files");
+  console.log("--leaks=<true|false>            attempt to self detect memory leaks");
 
   process.exit(1);
 };
@@ -64,6 +65,24 @@ if (rc.series) asyncMapFunc = 'mapSeries';
 var excludeTests = [];
 if (rc.exclude) {
   excludeTests = rc.exclude.split(',');
+}
+
+// support for handling memory leaks
+if (rc.leaks === true || rc.leaks === 'true') {
+  var memwatch = require('memwatch');
+  memwatch.on('leak', handleLeak);
+}
+
+// when a memory leak is detected, we dump the v8 heap to disk
+// where it can be later inspected
+function handleLeak(info) {
+  var heapdump = require('heapdump');
+  console.error('Possible memory leak detected, pid: ' + process.pid, info);
+  var file = '/tmp/turbo-' + process.pid + '-' + Date.now() + '.heapsnapshot';
+  heapdump.writeSnapshot(file, function(err){
+    if (err) return console.error(err);
+    console.error('Wrote snapshot: ' + file);
+  });
 }
 
 function go(cb) {
