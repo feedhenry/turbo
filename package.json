@@ -1,6 +1,6 @@
 {
   "name": "turbo-test-runner",
-  "version": "0.5.0",
+  "version": "0.6.2",
   "description": "Turbo the node.js Test Runner",
   "main": "turbo.js",
   "bin": {
@@ -22,16 +22,16 @@
   "author": "Damian Beresford",
   "license": "MIT",
   "dependencies": {
-    "async": "0.2.9",
-    "bunyan": "0.22.0",
-    "heapdump": "0.3.5",
-    "memwatch": "0.2.2",
-    "rc": "0.3.1",
-    "underscore": "1.5.2"
+    "async": "^0.2.9",
+    "bunyan": "^1.8.1",
+    "heapdump": "^0.3.7",
+    "memwatch-next": "^0.3.0",
+    "rc": "^0.3.1",
+    "underscore": "^1.5.2"
   },
   "devDependencies": {
-    "proxyquire": "0.4.1",
-    "istanbul": "0.1.42"
+    "proxyquire": "1.7.9",
+    "istanbul": "0.4.3"
   },
   "global": true
 }
