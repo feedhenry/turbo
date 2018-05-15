@@ -1,7 +1,7 @@
 ## Deprecation Notice
 This repository has been deprecated and is not being maintained. It should not be used. If you have any questions, please get in touch with the collaborators.
 
-## Turbo Test Runner
+Turbo Test Runner
 =================
 [![Build Status](https://travis-ci.org/feedhenry/turbo.png?branch=master)](https://travis-ci.org/feedhenry/turbo)
 [![NPM version](https://badge.fury.io/js/turbo.png)](http://badge.fury.io/js/turbo)
